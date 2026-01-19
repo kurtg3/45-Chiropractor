@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Read this article about chiropractic care and wellness.">
+    <meta name="robots" content="index, follow">
+    <title>Blog Post - Just Chiropractor</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+        .post-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0 40px;
+        }
+        .post-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        .post-meta {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.95rem;
+            opacity: 0.95;
+            flex-wrap: wrap;
+        }
+        .post-content {
+            padding: 60px 0;
+        }
+        .post-article {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+        .post-featured-image {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            display: block;
+        }
+        .post-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        .tag {
+            background: var(--bg-light);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .post-body {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-dark);
+            white-space: pre-wrap;
+        }
+        .post-body p {
+            margin-bottom: 1.5rem;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .post-footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--bg-light);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/" style="text-decoration: none;"><h2>Just Chiropractor</h2></a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/directory">Directory</a></li>
+                <li><a href="/blog" class="active">Blog</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Post Header -->
+    <div class="post-header">
+        <div class="container">
+            <h1 id="postTitle">Loading...</h1>
+            <div class="post-meta" id="postMeta">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Post Content -->
+    <section class="post-content">
+        <div class="container">
+            <div class="post-article">
+                <a href="/blog" class="back-link">&larr; Back to Blog</a>
+
+                <div id="postImage"></div>
+
+                <div id="postTags" class="post-tags">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+
+                <div id="postBody" class="post-body">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+
+                <div class="post-footer">
+                    <h3>Enjoyed this article?</h3>
+                    <p>Share it with others who might find it helpful!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Just Chiropractor</h3>
+                    <p>Your trusted source for finding chiropractors across the USA</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/directory">Directory</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="/sitemap.xml">Sitemap</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Just Chiropractor. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json" id="schema-data"></script>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBlogPost();
+        });
+
+        async function loadBlogPost() {
+            // Get slug from URL path
+            const pathParts = window.location.pathname.split('/');
+            const slug = pathParts[pathParts.length - 1];
+
+            if (!slug) {
+                window.location.href = '/blog';
+                return;
+            }
+
+            try {
+                const response = await API.blog.getBySlug(slug);
+                const post = response.post;
+
+                if (!post) {
+                    showNotFound();
+                    return;
+                }
+
+                // Update page content
+                document.getElementById('postTitle').textContent = post.title;
+                document.getElementById('postMeta').innerHTML = `
+                    <span>&#128197; ${formatDate(post.published_at || post.created_at)}</span>
+                    <span>&#9998; ${escapeHtml(post.author)}</span>
+                    ${post.views ? `<span>&#128065; ${post.views} views</span>` : ''}
+                `;
+
+                // Featured image
+                if (post.featured_image) {
+                    document.getElementById('postImage').innerHTML = `
+                        <img src="${escapeHtml(post.featured_image)}" alt="${escapeHtml(post.title)}" class="post-featured-image" loading="lazy">
+                    `;
+                }
+
+                // Tags
+                if (post.tags && post.tags.length > 0) {
+                    document.getElementById('postTags').innerHTML = post.tags.map(tag =>
+                        `<span class="tag">${escapeHtml(tag)}</span>`
+                    ).join('');
+                } else {
+                    document.getElementById('postTags').style.display = 'none';
+                }
+
+                // Content
+                document.getElementById('postBody').textContent = post.content;
+
+                // Update SEO
+                updateMetaTags({
+                    title: `${post.meta_title || post.title} - Just Chiropractor`,
+                    description: post.meta_description || post.excerpt || post.content.substring(0, 160),
+                    canonical: `https://justchiropractor.com/blog/${slug}`,
+                    ogType: 'article',
+                    ogImage: post.featured_image
+                });
+
+                // Add schema markup
+                addSchemaMarkup({
+                    "@context": "https://schema.org",
+                    "@type": "BlogPosting",
+                    "headline": post.title,
+                    "description": post.excerpt || post.content.substring(0, 160),
+                    "author": {
+                        "@type": "Person",
+                        "name": post.author
+                    },
+                    "datePublished": post.published_at,
+                    "dateModified": post.updated_at,
+                    "image": post.featured_image,
+                    "publisher": {
+                        "@type": "Organization",
+                        "name": "Just Chiropractor"
+                    }
+                });
+
+            } catch (error) {
+                console.error('Error loading blog post:', error);
+                showNotFound();
+            }
+        }
+
+        function showNotFound() {
+            document.getElementById('postTitle').textContent = 'Post Not Found';
+            document.getElementById('postBody').innerHTML = `
+                <p>Sorry, this blog post could not be found.</p>
+                <p><a href="/blog">Return to blog</a></p>
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Read the latest articles about chiropractic care, health tips, and wellness advice from trusted professionals.">
+    <meta name="keywords" content="chiropractic blog, health tips, wellness, spine health, chiropractic care">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Chiropractic Blog - Just Chiropractor">
+    <meta property="og:description" content="Health tips, wellness advice, and the latest in chiropractic care.">
+
+    <link rel="canonical" href="https://justchiropractor.com/blog">
+    <title>Chiropractic Blog - Just Chiropractor</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .blog-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0 40px;
+            text-align: center;
+        }
+        .blog-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .blog-list {
+            padding: 60px 0;
+        }
+        .blog-post-card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .blog-post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        .blog-post-content {
+            padding: 2rem;
+        }
+        .featured-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+        .featured-image-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .blog-meta {
+            display: flex;
+            gap: 2rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .blog-post-card h2 {
+            color: var(--text-dark);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        .blog-post-card h2 a {
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .blog-post-card h2 a:hover {
+            color: var(--primary-color);
+        }
+        .blog-excerpt {
+            color: var(--text-light);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        .blog-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .tag {
+            background: var(--bg-light);
+            color: var(--primary-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .read-more {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .read-more:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/" style="text-decoration: none;"><h2>Just Chiropractor</h2></a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/directory">Directory</a></li>
+                <li><a href="/blog" class="active">Blog</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Blog Header -->
+    <div class="blog-header">
+        <div class="container">
+            <h1>Chiropractic Blog</h1>
+            <p>Health tips, wellness advice, and the latest in chiropractic care</p>
+        </div>
+    </div>
+
+    <!-- Blog Posts -->
+    <section class="blog-list">
+        <div class="container">
+            <div id="blogPostsList">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Just Chiropractor</h3>
+                    <p>Your trusted source for finding chiropractors across the USA</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/directory">Directory</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="/sitemap.xml">Sitemap</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Just Chiropractor. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBlogPosts();
+        });
+
+        async function loadBlogPosts() {
+            const container = document.getElementById('blogPostsList');
+            showLoading(container);
+
+            try {
+                const response = await API.blog.getAll({ limit: 20 });
+                const posts = response.posts;
+
+                if (posts.length === 0) {
+                    container.innerHTML = `
+                        <div class="no-posts" style="text-align: center; padding: 4rem 2rem;">
+                            <h2>No Blog Posts Yet</h2>
+                            <p>Check back soon for articles about chiropractic care, health tips, and wellness advice.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = posts.map(post => `
+                    <article class="blog-post-card">
+                        ${post.featured_image ? `
+                            <img src="${escapeHtml(post.featured_image)}" alt="${escapeHtml(post.title)}" class="featured-image" loading="lazy">
+                        ` : `
+                            <div class="featured-image-placeholder"></div>
+                        `}
+                        <div class="blog-post-content">
+                            <div class="blog-meta">
+                                <span>&#128197; ${formatDate(post.published_at || post.created_at)}</span>
+                                <span>&#9998; ${escapeHtml(post.author)}</span>
+                                ${post.views ? `<span>&#128065; ${post.views} views</span>` : ''}
+                            </div>
+                            <h2><a href="/blog/${post.slug}">${escapeHtml(post.title)}</a></h2>
+                            ${post.tags && post.tags.length > 0 ? `
+                                <div class="blog-tags">
+                                    ${post.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+                                </div>
+                            ` : ''}
+                            <p class="blog-excerpt">${escapeHtml((post.excerpt || '').substring(0, 300))}...</p>
+                            <a href="/blog/${post.slug}" class="read-more">Read More &rarr;</a>
+                        </div>
+                    </article>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error loading blog posts:', error);
+                showError(container, 'Failed to load blog posts. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>

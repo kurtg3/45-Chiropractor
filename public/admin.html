@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Panel - Just Chiropractor</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/" style="text-decoration: none;">
+                    <h2>Just Chiropractor</h2>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/directory">Directory</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/admin" class="active">Admin</a></li>
+                <li><a href="#" onclick="handleLogout()" id="logoutBtn">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Admin Header -->
+    <div class="admin-header">
+        <div class="container">
+            <h1>Admin Panel</h1>
+            <p>Welcome, <span id="adminName">Administrator</span></p>
+        </div>
+    </div>
+
+    <!-- Admin Content -->
+    <section class="admin-content">
+        <div class="container">
+            <!-- Tab Navigation -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+                <button class="tab-btn" data-tab="chiropractors">Chiropractors</button>
+                <button class="tab-btn" data-tab="blog">Blog Posts</button>
+                <button class="tab-btn" data-tab="settings">Settings</button>
+                <button class="tab-btn" data-tab="users">Users</button>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div id="dashboard-tab" class="tab-content active">
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <h3>Total Chiropractors</h3>
+                        <div class="stat-value" id="stat-chiropractors">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Blog Posts</h3>
+                        <div class="stat-value" id="stat-posts">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Views</h3>
+                        <div class="stat-value" id="stat-views">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Active Users</h3>
+                        <div class="stat-value" id="stat-users">0</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-sections">
+                    <div class="dashboard-section">
+                        <h3>Top States</h3>
+                        <div id="top-states" class="list-container">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    <div class="dashboard-section">
+                        <h3>Popular Posts</h3>
+                        <div id="popular-posts" class="list-container">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chiropractors Tab -->
+            <div id="chiropractors-tab" class="tab-content">
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Manage Chiropractors</h2>
+                        <button onclick="showAddChiropractorForm()" class="btn btn-primary">Add New Chiropractor</button>
+                    </div>
+
+                    <!-- Add/Edit Form -->
+                    <div id="chiro-form-container" class="form-container" style="display: none;">
+                        <div class="form-card">
+                            <h3 id="chiro-form-title">Add New Chiropractor</h3>
+                            <form id="chiropractorForm" onsubmit="saveChiropractor(event)">
+                                <input type="hidden" id="chiro-id">
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="chiro-name">Name *</label>
+                                        <input type="text" id="chiro-name" required placeholder="Dr. John Smith">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="chiro-state">State *</label>
+                                        <select id="chiro-state" required>
+                                            <option value="">Select State</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="chiro-address">Address *</label>
+                                    <input type="text" id="chiro-address" required placeholder="123 Main Street, City, State ZIP">
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="chiro-phone">Phone *</label>
+                                        <input type="tel" id="chiro-phone" required placeholder="(555) 123-4567">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="chiro-email">Email *</label>
+                                        <input type="email" id="chiro-email" required placeholder="doctor@example.com">
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="chiro-website">Website</label>
+                                        <input type="url" id="chiro-website" placeholder="https://www.example.com">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="chiro-specialty">Specialty</label>
+                                        <input type="text" id="chiro-specialty" placeholder="Sports Injury & Rehabilitation">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="chiro-description">Description</label>
+                                    <textarea id="chiro-description" rows="3" placeholder="Brief description of the practice..."></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="chiro-featured">
+                                        Featured Chiropractor
+                                    </label>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <button type="button" onclick="cancelChiroForm()" class="btn btn-secondary">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Chiropractors List -->
+                    <div id="chiro-list" class="data-list">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blog Tab -->
+            <div id="blog-tab" class="tab-content">
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Manage Blog Posts</h2>
+                        <button onclick="showAddBlogForm()" class="btn btn-primary">Add New Post</button>
+                    </div>
+
+                    <!-- Add/Edit Form -->
+                    <div id="blog-form-container" class="form-container" style="display: none;">
+                        <div class="form-card">
+                            <h3 id="blog-form-title">Add New Blog Post</h3>
+                            <form id="blogForm" onsubmit="saveBlogPost(event)">
+                                <input type="hidden" id="blog-id">
+
+                                <div class="form-group">
+                                    <label for="blog-title">Title *</label>
+                                    <input type="text" id="blog-title" required placeholder="Enter blog post title">
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="blog-author">Author *</label>
+                                        <input type="text" id="blog-author" required placeholder="Dr. John Smith">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="blog-tags">Tags (comma-separated)</label>
+                                        <input type="text" id="blog-tags" placeholder="Health, Wellness, Tips">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="blog-featured-image">Featured Image URL</label>
+                                    <input type="url" id="blog-featured-image" placeholder="https://example.com/image.jpg">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="blog-excerpt">Excerpt</label>
+                                    <textarea id="blog-excerpt" rows="2" placeholder="Brief summary of the post..."></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="blog-content">Content *</label>
+                                    <textarea id="blog-content" required rows="10" placeholder="Write your blog post content here..."></textarea>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="blog-meta-title">SEO Title</label>
+                                        <input type="text" id="blog-meta-title" placeholder="SEO optimized title">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="blog-meta-desc">SEO Description</label>
+                                        <input type="text" id="blog-meta-desc" placeholder="SEO meta description">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="blog-published" checked>
+                                        Published
+                                    </label>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <button type="button" onclick="cancelBlogForm()" class="btn btn-secondary">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Blog Posts List -->
+                    <div id="blog-list" class="data-list">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settings-tab" class="tab-content">
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Site Settings</h2>
+                        <button onclick="saveAllSettings()" class="btn btn-primary">Save All Settings</button>
+                    </div>
+
+                    <div class="settings-grid" id="settings-container">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Tab -->
+            <div id="users-tab" class="tab-content">
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Manage Users</h2>
+                        <button onclick="showAddUserForm()" class="btn btn-primary">Add New User</button>
+                    </div>
+
+                    <!-- Add User Form -->
+                    <div id="user-form-container" class="form-container" style="display: none;">
+                        <div class="form-card">
+                            <h3>Add New Admin User</h3>
+                            <form id="userForm" onsubmit="saveUser(event)">
+                                <div class="form-group">
+                                    <label for="user-name">Name *</label>
+                                    <input type="text" id="user-name" required placeholder="John Smith">
+                                </div>
+                                <div class="form-group">
+                                    <label for="user-email">Email *</label>
+                                    <input type="email" id="user-email" required placeholder="admin@example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="user-password">Password *</label>
+                                    <input type="password" id="user-password" required minlength="8" placeholder="Minimum 8 characters">
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Create User</button>
+                                    <button type="button" onclick="cancelUserForm()" class="btn btn-secondary">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Users List -->
+                    <div id="users-list" class="data-list">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 Just Chiropractor. Admin Panel.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/main.js"></script>
+    <script>
+        // Check authentication on load
+        document.addEventListener('DOMContentLoaded', async function() {
+            if (!API.auth.isAuthenticated()) {
+                window.location.href = '/admin/login';
+                return;
+            }
+
+            try {
+                const response = await API.auth.verifyToken();
+                document.getElementById('adminName').textContent = response.user.name || response.user.email;
+
+                // Initialize admin panel
+                populateStateSelector('chiro-state');
+                setupTabs();
+                loadDashboard();
+            } catch (error) {
+                console.error('Auth error:', error);
+                window.location.href = '/admin/login';
+            }
+        });
+
+        // Tab Management
+        function setupTabs() {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabName = this.dataset.tab;
+                    switchTab(tabName);
+                });
+            });
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+
+            // Load tab content
+            switch(tabName) {
+                case 'dashboard':
+                    loadDashboard();
+                    break;
+                case 'chiropractors':
+                    loadChiropractorsList();
+                    break;
+                case 'blog':
+                    loadBlogPostsList();
+                    break;
+                case 'settings':
+                    loadSettings();
+                    break;
+                case 'users':
+                    loadUsersList();
+                    break;
+            }
+        }
+
+        // Dashboard
+        async function loadDashboard() {
+            try {
+                const data = await API.admin.getDashboard();
+
+                document.getElementById('stat-chiropractors').textContent = data.totalChiropractors;
+                document.getElementById('stat-posts').textContent = data.totalBlogPosts;
+                document.getElementById('stat-views').textContent = data.totalBlogViews;
+                document.getElementById('stat-users').textContent = data.totalUsers;
+
+                // Top States
+                const topStatesContainer = document.getElementById('top-states');
+                topStatesContainer.innerHTML = data.topStates.map(s => `
+                    <div class="list-item">
+                        <span>${escapeHtml(s.state)}</span>
+                        <span class="badge">${s.count}</span>
+                    </div>
+                `).join('') || '<p>No data available</p>';
+
+                // Popular Posts
+                const popularPostsContainer = document.getElementById('popular-posts');
+                popularPostsContainer.innerHTML = data.popularPosts.map(p => `
+                    <div class="list-item">
+                        <span>${escapeHtml(p.title.substring(0, 40))}...</span>
+                        <span class="badge">${p.views} views</span>
+                    </div>
+                `).join('') || '<p>No data available</p>';
+
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                showToast('Failed to load dashboard', 'error');
+            }
+        }
+
+        // Chiropractor Management
+        async function loadChiropractorsList() {
+            const container = document.getElementById('chiro-list');
+            showLoading(container);
+
+            try {
+                const response = await API.admin.getAllChiropractors();
+                const chiropractors = response.chiropractors;
+
+                if (chiropractors.length === 0) {
+                    container.innerHTML = '<p class="no-data">No chiropractors found. Add your first one above!</p>';
+                    return;
+                }
+
+                container.innerHTML = chiropractors.map(chiro => `
+                    <div class="data-item ${!chiro.is_active ? 'inactive' : ''}">
+                        <div class="data-item-header">
+                            <h3>${escapeHtml(chiro.name)}</h3>
+                            <div>
+                                <span class="state-badge">${escapeHtml(chiro.state)}</span>
+                                ${chiro.is_featured ? '<span class="badge featured">Featured</span>' : ''}
+                                ${!chiro.is_active ? '<span class="badge inactive">Inactive</span>' : ''}
+                            </div>
+                        </div>
+                        <div class="data-item-body">
+                            <p><strong>Specialty:</strong> ${escapeHtml(chiro.specialty || 'General Chiropractic')}</p>
+                            <p><strong>Address:</strong> ${escapeHtml(chiro.address)}</p>
+                            <p><strong>Phone:</strong> ${escapeHtml(chiro.phone)}</p>
+                            <p><strong>Email:</strong> ${escapeHtml(chiro.email)}</p>
+                        </div>
+                        <div class="data-item-actions">
+                            <button onclick="editChiropractor(${chiro.id})" class="btn btn-secondary btn-sm">Edit</button>
+                            ${chiro.is_active
+                                ? `<button onclick="deleteChiropractorConfirm(${chiro.id})" class="btn btn-danger btn-sm">Delete</button>`
+                                : `<button onclick="restoreChiropractor(${chiro.id})" class="btn btn-success btn-sm">Restore</button>`
+                            }
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error loading chiropractors:', error);
+                showError(container, 'Failed to load chiropractors');
+            }
+        }
+
+        function showAddChiropractorForm() {
+            document.getElementById('chiro-form-title').textContent = 'Add New Chiropractor';
+            document.getElementById('chiropractorForm').reset();
+            document.getElementById('chiro-id').value = '';
+            document.getElementById('chiro-form-container').style.display = 'block';
+            document.getElementById('chiro-form-container').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function editChiropractor(id) {
+            try {
+                const response = await API.chiropractors.getById(id);
+                const chiro = response.chiropractor;
+
+                document.getElementById('chiro-form-title').textContent = 'Edit Chiropractor';
+                document.getElementById('chiro-id').value = chiro.id;
+                document.getElementById('chiro-name').value = chiro.name;
+                document.getElementById('chiro-state').value = chiro.state;
+                document.getElementById('chiro-address').value = chiro.address;
+                document.getElementById('chiro-phone').value = chiro.phone;
+                document.getElementById('chiro-email').value = chiro.email;
+                document.getElementById('chiro-website').value = chiro.website || '';
+                document.getElementById('chiro-specialty').value = chiro.specialty || '';
+                document.getElementById('chiro-description').value = chiro.description || '';
+                document.getElementById('chiro-featured').checked = chiro.is_featured;
+
+                document.getElementById('chiro-form-container').style.display = 'block';
+                document.getElementById('chiro-form-container').scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error loading chiropractor:', error);
+                showToast('Failed to load chiropractor details', 'error');
+            }
+        }
+
+        async function saveChiropractor(event) {
+            event.preventDefault();
+
+            const id = document.getElementById('chiro-id').value;
+            const data = {
+                name: document.getElementById('chiro-name').value,
+                state: document.getElementById('chiro-state').value,
+                address: document.getElementById('chiro-address').value,
+                phone: document.getElementById('chiro-phone').value,
+                email: document.getElementById('chiro-email').value,
+                website: document.getElementById('chiro-website').value || null,
+                specialty: document.getElementById('chiro-specialty').value || null,
+                description: document.getElementById('chiro-description').value || null,
+                is_featured: document.getElementById('chiro-featured').checked
+            };
+
+            try {
+                if (id) {
+                    await API.chiropractors.update(id, data);
+                    showToast('Chiropractor updated successfully');
+                } else {
+                    await API.chiropractors.create(data);
+                    showToast('Chiropractor added successfully');
+                }
+
+                cancelChiroForm();
+                loadChiropractorsList();
+            } catch (error) {
+                console.error('Error saving chiropractor:', error);
+                showToast(error.message || 'Failed to save chiropractor', 'error');
+            }
+        }
+
+        async function deleteChiropractorConfirm(id) {
+            if (confirmAction('Are you sure you want to delete this chiropractor?')) {
+                try {
+                    await API.chiropractors.delete(id);
+                    showToast('Chiropractor deleted successfully');
+                    loadChiropractorsList();
+                } catch (error) {
+                    showToast('Failed to delete chiropractor', 'error');
+                }
+            }
+        }
+
+        async function restoreChiropractor(id) {
+            try {
+                await API.admin.restoreChiropractor(id);
+                showToast('Chiropractor restored successfully');
+                loadChiropractorsList();
+            } catch (error) {
+                showToast('Failed to restore chiropractor', 'error');
+            }
+        }
+
+        function cancelChiroForm() {
+            document.getElementById('chiropractorForm').reset();
+            document.getElementById('chiro-form-container').style.display = 'none';
+        }
+
+        // Blog Post Management
+        async function loadBlogPostsList() {
+            const container = document.getElementById('blog-list');
+            showLoading(container);
+
+            try {
+                const response = await API.admin.getAllBlogPosts();
+                const posts = response.posts;
+
+                if (posts.length === 0) {
+                    container.innerHTML = '<p class="no-data">No blog posts found. Add your first one above!</p>';
+                    return;
+                }
+
+                container.innerHTML = posts.map(post => `
+                    <div class="data-item ${!post.is_published ? 'draft' : ''}">
+                        <div class="data-item-header">
+                            <h3>${escapeHtml(post.title)}</h3>
+                            <span class="badge ${post.is_published ? 'published' : 'draft'}">${post.is_published ? 'Published' : 'Draft'}</span>
+                        </div>
+                        <div class="data-item-body">
+                            <p><strong>Author:</strong> ${escapeHtml(post.author)}</p>
+                            <p><strong>Date:</strong> ${formatDate(post.created_at)}</p>
+                            <p><strong>Views:</strong> ${post.views || 0}</p>
+                            ${post.tags && post.tags.length > 0 ? `<p><strong>Tags:</strong> ${post.tags.map(t => escapeHtml(t)).join(', ')}</p>` : ''}
+                        </div>
+                        <div class="data-item-actions">
+                            <button onclick="editBlogPost(${post.id})" class="btn btn-secondary btn-sm">Edit</button>
+                            <button onclick="toggleBlogPublish(${post.id})" class="btn btn-info btn-sm">${post.is_published ? 'Unpublish' : 'Publish'}</button>
+                            <button onclick="deleteBlogPostConfirm(${post.id})" class="btn btn-danger btn-sm">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error loading blog posts:', error);
+                showError(container, 'Failed to load blog posts');
+            }
+        }
+
+        function showAddBlogForm() {
+            document.getElementById('blog-form-title').textContent = 'Add New Blog Post';
+            document.getElementById('blogForm').reset();
+            document.getElementById('blog-id').value = '';
+            document.getElementById('blog-published').checked = true;
+            document.getElementById('blog-form-container').style.display = 'block';
+            document.getElementById('blog-form-container').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function editBlogPost(id) {
+            try {
+                const response = await API.blog.getById(id);
+                const post = response.post;
+
+                document.getElementById('blog-form-title').textContent = 'Edit Blog Post';
+                document.getElementById('blog-id').value = post.id;
+                document.getElementById('blog-title').value = post.title;
+                document.getElementById('blog-author').value = post.author;
+                document.getElementById('blog-tags').value = post.tags ? post.tags.join(', ') : '';
+                document.getElementById('blog-featured-image').value = post.featured_image || '';
+                document.getElementById('blog-excerpt').value = post.excerpt || '';
+                document.getElementById('blog-content').value = post.content;
+                document.getElementById('blog-meta-title').value = post.meta_title || '';
+                document.getElementById('blog-meta-desc').value = post.meta_description || '';
+                document.getElementById('blog-published').checked = post.is_published;
+
+                document.getElementById('blog-form-container').style.display = 'block';
+                document.getElementById('blog-form-container').scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error loading blog post:', error);
+                showToast('Failed to load blog post details', 'error');
+            }
+        }
+
+        async function saveBlogPost(event) {
+            event.preventDefault();
+
+            const id = document.getElementById('blog-id').value;
+            const tagsInput = document.getElementById('blog-tags').value;
+            const tags = tagsInput ? tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag) : [];
+
+            const data = {
+                title: document.getElementById('blog-title').value,
+                author: document.getElementById('blog-author').value,
+                content: document.getElementById('blog-content').value,
+                tags: tags,
+                featured_image: document.getElementById('blog-featured-image').value || null,
+                excerpt: document.getElementById('blog-excerpt').value || null,
+                meta_title: document.getElementById('blog-meta-title').value || null,
+                meta_description: document.getElementById('blog-meta-desc').value || null,
+                is_published: document.getElementById('blog-published').checked
+            };
+
+            try {
+                if (id) {
+                    await API.blog.update(id, data);
+                    showToast('Blog post updated successfully');
+                } else {
+                    await API.blog.create(data);
+                    showToast('Blog post added successfully');
+                }
+
+                cancelBlogForm();
+                loadBlogPostsList();
+            } catch (error) {
+                console.error('Error saving blog post:', error);
+                showToast(error.message || 'Failed to save blog post', 'error');
+            }
+        }
+
+        async function toggleBlogPublish(id) {
+            try {
+                await API.admin.toggleBlogPublish(id);
+                showToast('Publish status updated');
+                loadBlogPostsList();
+            } catch (error) {
+                showToast('Failed to update publish status', 'error');
+            }
+        }
+
+        async function deleteBlogPostConfirm(id) {
+            if (confirmAction('Are you sure you want to delete this blog post?')) {
+                try {
+                    await API.blog.delete(id);
+                    showToast('Blog post deleted successfully');
+                    loadBlogPostsList();
+                } catch (error) {
+                    showToast('Failed to delete blog post', 'error');
+                }
+            }
+        }
+
+        function cancelBlogForm() {
+            document.getElementById('blogForm').reset();
+            document.getElementById('blog-form-container').style.display = 'none';
+        }
+
+        // Settings Management
+        async function loadSettings() {
+            const container = document.getElementById('settings-container');
+            showLoading(container);
+
+            try {
+                const response = await API.settings.getAll();
+                const settings = response.settings;
+
+                container.innerHTML = Object.entries(settings).map(([key, setting]) => `
+                    <div class="setting-item">
+                        <label for="setting-${key}">${formatSettingLabel(key)}</label>
+                        <small>${escapeHtml(setting.description || '')}</small>
+                        ${getSettingInput(key, setting)}
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error loading settings:', error);
+                showError(container, 'Failed to load settings');
+            }
+        }
+
+        function formatSettingLabel(key) {
+            return key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        }
+
+        function getSettingInput(key, setting) {
+            const value = escapeHtml(setting.value || '');
+            switch (setting.type) {
+                case 'color':
+                    return `<input type="color" id="setting-${key}" value="${value}" data-key="${key}">`;
+                case 'url':
+                    return `<input type="url" id="setting-${key}" value="${value}" data-key="${key}" placeholder="https://...">`;
+                case 'textarea':
+                    return `<textarea id="setting-${key}" data-key="${key}" rows="3">${value}</textarea>`;
+                default:
+                    return `<input type="text" id="setting-${key}" value="${value}" data-key="${key}">`;
+            }
+        }
+
+        async function saveAllSettings() {
+            const inputs = document.querySelectorAll('#settings-container input, #settings-container textarea');
+            const settings = {};
+
+            inputs.forEach(input => {
+                settings[input.dataset.key] = input.value;
+            });
+
+            try {
+                await API.settings.bulkUpdate(settings);
+                showToast('Settings saved successfully');
+            } catch (error) {
+                showToast('Failed to save settings', 'error');
+            }
+        }
+
+        // User Management
+        async function loadUsersList() {
+            const container = document.getElementById('users-list');
+            showLoading(container);
+
+            try {
+                const response = await API.admin.getUsers();
+                const users = response.users;
+
+                container.innerHTML = users.map(user => `
+                    <div class="data-item ${!user.is_active ? 'inactive' : ''}">
+                        <div class="data-item-header">
+                            <h3>${escapeHtml(user.name || user.email)}</h3>
+                            <div>
+                                <span class="badge">${escapeHtml(user.role)}</span>
+                                <span class="badge ${user.is_active ? 'active' : 'inactive'}">${user.is_active ? 'Active' : 'Inactive'}</span>
+                            </div>
+                        </div>
+                        <div class="data-item-body">
+                            <p><strong>Email:</strong> ${escapeHtml(user.email)}</p>
+                            <p><strong>Created:</strong> ${formatDate(user.created_at)}</p>
+                        </div>
+                        <div class="data-item-actions">
+                            <button onclick="toggleUserActive(${user.id})" class="btn btn-secondary btn-sm">${user.is_active ? 'Deactivate' : 'Activate'}</button>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error loading users:', error);
+                showError(container, 'Failed to load users');
+            }
+        }
+
+        function showAddUserForm() {
+            document.getElementById('userForm').reset();
+            document.getElementById('user-form-container').style.display = 'block';
+            document.getElementById('user-form-container').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function saveUser(event) {
+            event.preventDefault();
+
+            const data = {
+                name: document.getElementById('user-name').value,
+                email: document.getElementById('user-email').value,
+                password: document.getElementById('user-password').value
+            };
+
+            try {
+                await API.admin.createUser(data);
+                showToast('User created successfully');
+                cancelUserForm();
+                loadUsersList();
+            } catch (error) {
+                showToast(error.message || 'Failed to create user', 'error');
+            }
+        }
+
+        async function toggleUserActive(id) {
+            try {
+                await API.admin.toggleUserActive(id);
+                showToast('User status updated');
+                loadUsersList();
+            } catch (error) {
+                showToast(error.message || 'Failed to update user status', 'error');
+            }
+        }
+
+        function cancelUserForm() {
+            document.getElementById('userForm').reset();
+            document.getElementById('user-form-container').style.display = 'none';
+        }
+
+        // Logout
+        async function handleLogout() {
+            try {
+                await API.auth.logout();
+            } finally {
+                window.location.href = '/admin/login';
+            }
+        }
+    </script>
+</body>
+</html>

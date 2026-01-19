@@ -1,0 +1,14 @@
+# Robots.txt for Just Chiropractor
+User-agent: *
+Allow: /
+
+# Disallow admin pages
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://justchiropractor.com/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1

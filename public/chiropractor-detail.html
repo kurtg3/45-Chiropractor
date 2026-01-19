@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Find detailed information about chiropractors and explore other trusted professionals.">
+    <meta name="keywords" content="chiropractor, chiropractic care, spine health">
+    <meta name="robots" content="index, follow">
+    <title>Chiropractor Details - Just Chiropractor</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+        .detail-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+        }
+        .breadcrumb {
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        .breadcrumb a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+        }
+        .breadcrumb a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        .breadcrumb span {
+            margin: 0 0.5rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        @media (max-width: 768px) {
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .main-info {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .chiropractor-header {
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .chiropractor-name {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        .state-location {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        .specialty-badge {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+        }
+        .contact-section {
+            margin: 2rem 0;
+        }
+        .contact-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+        .contact-icon {
+            font-size: 1.3rem;
+            margin-right: 1rem;
+            width: 30px;
+            text-align: center;
+        }
+        .contact-item a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+        .quick-info {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        .quick-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        .info-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .cta-button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            transition: background 0.3s ease;
+        }
+        .cta-button:hover {
+            background: var(--primary-dark);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-section h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .related-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .related-card:hover {
+            transform: translateY(-5px);
+        }
+        .related-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        .related-card p {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/" style="text-decoration: none;"><h2>Just Chiropractor</h2></a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/directory" class="active">Directory</a></li>
+                <li><a href="/blog">Blog</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Detail Header -->
+    <div class="detail-header">
+        <div class="container">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="/">Home</a>
+                <span>&rsaquo;</span>
+                <a href="/directory">Directory</a>
+                <span>&rsaquo;</span>
+                <span id="breadcrumb-name">Chiropractor</span>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="detail-container">
+        <div class="detail-grid">
+            <!-- Main Information -->
+            <div class="main-info">
+                <div class="chiropractor-header">
+                    <h1 class="chiropractor-name" id="chiro-name">Loading...</h1>
+                    <span class="state-location" id="chiro-state"></span>
+                    <span class="specialty-badge" id="chiro-specialty"></span>
+                </div>
+
+                <div class="contact-section">
+                    <h3>Contact Information</h3>
+                    <div class="contact-item">
+                        <span class="contact-icon">&#128205;</span>
+                        <div id="chiro-address">Loading...</div>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">&#128222;</span>
+                        <a href="#" id="chiro-phone-link">
+                            <span id="chiro-phone">Loading...</span>
+                        </a>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">&#9993;</span>
+                        <a href="#" id="chiro-email-link">
+                            <span id="chiro-email">Loading...</span>
+                        </a>
+                    </div>
+                    <div class="contact-item" id="website-item" style="display: none;">
+                        <span class="contact-icon">&#127760;</span>
+                        <a href="#" id="chiro-website" target="_blank" rel="noopener noreferrer">Visit Website</a>
+                    </div>
+                </div>
+
+                <div class="contact-section">
+                    <h3>About This Practice</h3>
+                    <p id="about-text">Loading...</p>
+                </div>
+            </div>
+
+            <!-- Quick Info Sidebar -->
+            <div class="quick-info">
+                <h3>Quick Information</h3>
+                <div class="info-item">
+                    <div class="info-label">Specialty</div>
+                    <div id="quick-specialty">Loading...</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Location</div>
+                    <div id="quick-location">Loading...</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">State</div>
+                    <div id="quick-state">Loading...</div>
+                </div>
+
+                <a href="#" class="cta-button" id="contact-cta">Contact Now</a>
+            </div>
+        </div>
+
+        <!-- Related Chiropractors -->
+        <div class="related-section">
+            <h2>Other Chiropractors in <span id="related-state">This State</span></h2>
+            <div class="related-grid" id="related-chiropractors">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Just Chiropractor</h3>
+                    <p>Your trusted source for finding chiropractors across the USA</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/directory">Directory</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="/sitemap.xml">Sitemap</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Just Chiropractor. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json" id="schema-data"></script>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadChiropractorDetails();
+        });
+
+        async function loadChiropractorDetails() {
+            // Get ID from URL path
+            const pathParts = window.location.pathname.split('/');
+            const chiroId = pathParts[2]; // /chiropractor/{id}/{slug}
+
+            if (!chiroId) {
+                window.location.href = '/directory';
+                return;
+            }
+
+            try {
+                const response = await API.chiropractors.getById(chiroId);
+                const chiro = response.chiropractor;
+
+                if (!chiro) {
+                    window.location.href = '/directory';
+                    return;
+                }
+
+                populateChiropractorDetails(chiro);
+                loadRelatedChiropractors(chiro.state, chiro.id);
+                generateSchemaData(chiro);
+
+            } catch (error) {
+                console.error('Error loading chiropractor:', error);
+                window.location.href = '/directory';
+            }
+        }
+
+        function populateChiropractorDetails(chiro) {
+            // Update page title and breadcrumb
+            document.title = `${chiro.name} - ${chiro.state} Chiropractor | Just Chiropractor`;
+            document.getElementById('breadcrumb-name').textContent = chiro.name;
+
+            // Main header
+            document.getElementById('chiro-name').textContent = chiro.name;
+            document.getElementById('chiro-state').textContent = chiro.state;
+            document.getElementById('chiro-specialty').textContent = chiro.specialty || 'General Chiropractic';
+
+            // Contact information
+            document.getElementById('chiro-address').textContent = chiro.address;
+            document.getElementById('chiro-phone').textContent = chiro.phone;
+            document.getElementById('chiro-phone-link').href = `tel:${chiro.phone.replace(/\D/g, '')}`;
+            document.getElementById('chiro-email').textContent = chiro.email;
+            document.getElementById('chiro-email-link').href = `mailto:${chiro.email}`;
+
+            if (chiro.website) {
+                document.getElementById('website-item').style.display = 'flex';
+                document.getElementById('chiro-website').href = chiro.website;
+            }
+
+            // Quick info sidebar
+            document.getElementById('quick-specialty').textContent = chiro.specialty || 'General Chiropractic';
+            document.getElementById('quick-location').textContent = chiro.address;
+            document.getElementById('quick-state').textContent = chiro.state;
+            document.getElementById('contact-cta').href = `tel:${chiro.phone.replace(/\D/g, '')}`;
+
+            // About text
+            document.getElementById('about-text').textContent = chiro.description ||
+                `${chiro.name} specializes in ${chiro.specialty || 'general chiropractic care'} and is located in ${chiro.state}. Contact them directly for more information about services, hours, and scheduling an appointment.`;
+
+            // Related section header
+            document.getElementById('related-state').textContent = chiro.state;
+
+            // Update SEO
+            updateMetaTags({
+                title: `${chiro.name} - ${chiro.state} Chiropractor | Just Chiropractor`,
+                description: `${chiro.name} - ${chiro.specialty || 'Chiropractor'} in ${chiro.state}. Contact: ${chiro.phone}. Find detailed information and contact this trusted chiropractic professional.`,
+                keywords: `${chiro.name}, chiropractor ${chiro.state}, ${chiro.specialty || 'chiropractic care'}`,
+                canonical: window.location.href
+            });
+        }
+
+        async function loadRelatedChiropractors(state, currentId) {
+            const container = document.getElementById('related-chiropractors');
+
+            try {
+                const response = await API.chiropractors.getRelated(currentId, 6);
+                const related = response.related;
+
+                if (related.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: #666;">No other chiropractors found in this state yet.</p>';
+                    return;
+                }
+
+                container.innerHTML = related.map(chiro => `
+                    <a href="/chiropractor/${chiro.id}/${createSlug(chiro.name)}" class="related-card">
+                        <h3>${escapeHtml(chiro.name)}</h3>
+                        <p><strong>${escapeHtml(chiro.specialty || 'General Chiropractic')}</strong></p>
+                        <p>&#128205; ${escapeHtml(chiro.address)}</p>
+                        <p>&#128222; ${escapeHtml(chiro.phone)}</p>
+                    </a>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error loading related chiropractors:', error);
+                container.innerHTML = '<p style="text-align: center; color: #666;">Unable to load related chiropractors.</p>';
+            }
+        }
+
+        function generateSchemaData(chiro) {
+            const schema = {
+                "@context": "https://schema.org",
+                "@type": "MedicalBusiness",
+                "name": chiro.name,
+                "medicalSpecialty": chiro.specialty || "Chiropractic",
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": chiro.address,
+                    "addressRegion": chiro.state,
+                    "addressCountry": "US"
+                },
+                "telephone": chiro.phone,
+                "email": chiro.email
+            };
+
+            if (chiro.website) {
+                schema.url = chiro.website;
+            }
+
+            addSchemaMarkup(schema);
+        }
+    </script>
+</body>
+</html>

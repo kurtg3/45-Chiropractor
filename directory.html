@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Browse chiropractors by state. Find trusted chiropractic professionals in your area.">
+    <title>Chiropractor Directory - Just Chiropractor</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .directory-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0 40px;
+            text-align: center;
+        }
+
+        .directory-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 2rem auto;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .state-section {
+            margin-bottom: 3rem;
+        }
+
+        .state-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+
+        .state-header:hover {
+            background: var(--primary-dark);
+        }
+
+        .state-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .state-count {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .state-content {
+            padding: 2rem 0;
+            display: none;
+        }
+
+        .state-content.active {
+            display: block;
+        }
+
+        .arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .filters {
+            background: var(--bg-light);
+            padding: 2rem 0;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .all-states-view .chiro-card {
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h2>🏥 Just Chiropractor</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="directory.html" class="active">Directory</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="admin.html">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Directory Header -->
+    <div class="directory-header">
+        <div class="container">
+            <h1>Chiropractor Directory</h1>
+            <p>Find trusted chiropractors across all 50 states</p>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <section class="filters">
+        <div class="container">
+            <div class="search-bar">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search by name, state, or specialty...">
+                <button onclick="searchChiropractors()" class="btn btn-primary">Search</button>
+            </div>
+            <div class="filter-group">
+                <select id="stateFilter" class="state-selector" onchange="filterByState()">
+                    <option value="">All States</option>
+                </select>
+                <button onclick="resetFilters()" class="btn btn-secondary">Reset</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Directory Content -->
+    <section style="padding: 40px 0;">
+        <div class="container">
+            <div id="directoryContent">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Just Chiropractor</h3>
+                    <p>Your trusted source for finding chiropractors across the USA</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="directory.html">Directory</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="admin.html">Admin</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="sitemap.xml">Sitemap</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Just Chiropractor. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        let currentFilter = '';
+        let currentSearch = '';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            populateStateSelector('stateFilter');
+            loadDirectory();
+            
+            // Check for state parameter in URL
+            const stateParam = getUrlParameter('state');
+            if (stateParam) {
+                document.getElementById('stateFilter').value = stateParam;
+                filterByState();
+            }
+        });
+
+        function loadDirectory(filteredChiros = null) {
+            const chiropractors = filteredChiros || getChiropractors();
+            const container = document.getElementById('directoryContent');
+
+            if (chiropractors.length === 0) {
+                container.innerHTML = '<p class="no-results">No chiropractors found. Try adjusting your filters or add chiropractors via the admin panel.</p>';
+                return;
+            }
+
+            // Group chiropractors by state
+            const byState = {};
+            chiropractors.forEach(chiro => {
+                if (!byState[chiro.state]) {
+                    byState[chiro.state] = [];
+                }
+                byState[chiro.state].push(chiro);
+            });
+
+            // Sort states alphabetically
+            const sortedStates = Object.keys(byState).sort();
+
+            // If filtering by a specific state, show expanded view
+            if (currentFilter) {
+                container.innerHTML = `
+                    <div class="state-section">
+                        <div class="state-header">
+                            <h2>${currentFilter}</h2>
+                            <span class="state-count">${byState[currentFilter].length} chiropractor${byState[currentFilter].length !== 1 ? 's' : ''}</span>
+                        </div>
+                        <div class="state-content active">
+                            <div class="chiro-grid">
+                                ${byState[currentFilter].map(chiro => createChiropractorCard(chiro)).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Show all states with accordion
+                container.innerHTML = sortedStates.map(state => `
+                    <div class="state-section">
+                        <div class="state-header" onclick="toggleState('${state}')">
+                            <h2>${state}</h2>
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <span class="state-count">${byState[state].length} chiropractor${byState[state].length !== 1 ? 's' : ''}</span>
+                                <span class="arrow">▼</span>
+                            </div>
+                        </div>
+                        <div class="state-content" id="state-${state}">
+                            <div class="chiro-grid">
+                                ${byState[state].map(chiro => createChiropractorCard(chiro)).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function createChiropractorCard(chiro) {
+            const slug = createSlug(chiro.name);
+            return `
+                <a href="chiropractor-detail.html?id=${chiro.id}&name=${slug}" class="chiro-card" style="text-decoration: none; color: inherit; display: block;">
+                    <div class="chiro-header">
+                        <h3>${chiro.name}</h3>
+                        <span class="state-badge">${chiro.state}</span>
+                    </div>
+                    <p class="chiro-specialty">${chiro.specialty || 'General Chiropractic'}</p>
+                    <div class="chiro-details">
+                        <p>📍 ${chiro.address}</p>
+                        <p>📞 ${chiro.phone}</p>
+                        <p>✉️ ${chiro.email}</p>
+                        ${chiro.website ? `<p>🌐 <span style="color: var(--primary-color);">${chiro.website}</span></p>` : ''}
+                    </div>
+                </a>
+            `;
+        }
+
+        function toggleState(state) {
+            const content = document.getElementById(`state-${state}`);
+            const arrow = event.currentTarget.querySelector('.arrow');
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                arrow.classList.remove('open');
+            } else {
+                content.classList.add('active');
+                arrow.classList.add('open');
+            }
+        }
+
+        function filterByState() {
+            const state = document.getElementById('stateFilter').value;
+            currentFilter = state;
+            
+            if (state) {
+                const filtered = getChiropractorsByState(state);
+                loadDirectory(filtered);
+            } else {
+                loadDirectory();
+            }
+        }
+
+        function searchChiropractors() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            currentSearch = searchTerm;
+            
+            if (!searchTerm) {
+                filterByState();
+                return;
+            }
+
+            const allChiros = getChiropractors();
+            const filtered = allChiros.filter(chiro => 
+                chiro.name.toLowerCase().includes(searchTerm) ||
+                chiro.state.toLowerCase().includes(searchTerm) ||
+                (chiro.specialty && chiro.specialty.toLowerCase().includes(searchTerm)) ||
+                chiro.address.toLowerCase().includes(searchTerm)
+            );
+
+            loadDirectory(filtered);
+        }
+
+        function resetFilters() {
+            document.getElementById('stateFilter').value = '';
+            document.getElementById('searchInput').value = '';
+            currentFilter = '';
+            currentSearch = '';
+            loadDirectory();
+        }
+    </script>
+</body>
+</html>

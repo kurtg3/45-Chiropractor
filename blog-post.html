@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Read this article about chiropractic care and wellness.">
+    <title>Blog Post - Just Chiropractor</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .post-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0 40px;
+        }
+
+        .post-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .post-meta {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.95rem;
+            opacity: 0.95;
+            flex-wrap: wrap;
+        }
+
+        .post-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .post-content {
+            padding: 60px 0;
+        }
+
+        .post-article {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .post-featured-image {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            display: block;
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .tag {
+            background: var(--bg-light);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .post-body {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-dark);
+            white-space: pre-wrap;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+        }
+
+        .back-link:hover {
+            gap: 1rem;
+        }
+
+        .post-footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--bg-light);
+        }
+
+        .share-section {
+            text-align: center;
+        }
+
+        .share-section h3 {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h2>🏥 Just Chiropractor</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="directory.html">Directory</a></li>
+                <li><a href="blog.html" class="active">Blog</a></li>
+                <li><a href="admin.html">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Post Header -->
+    <div class="post-header">
+        <div class="container">
+            <h1 id="postTitle">Loading...</h1>
+            <div class="post-meta" id="postMeta">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Post Content -->
+    <section class="post-content">
+        <div class="container">
+            <div class="post-article">
+                <a href="blog.html" class="back-link">← Back to Blog</a>
+                
+                <div id="postTags" class="post-tags">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+
+                <div id="postBody" class="post-body">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+
+                <div class="post-footer">
+                    <div class="share-section">
+                        <h3>Enjoyed this article?</h3>
+                        <p>Share it with others who might find it helpful!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Just Chiropractor</h3>
+                    <p>Your trusted source for finding chiropractors across the USA</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="directory.html">Directory</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="admin.html">Admin</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="sitemap.xml">Sitemap</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Just Chiropractor. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBlogPost();
+        });
+
+        function loadBlogPost() {
+            const postId = getUrlParameter('id');
+            
+            if (!postId) {
+                window.location.href = 'blog.html';
+                return;
+            }
+
+            const post = getBlogPostById(postId);
+
+            if (!post) {
+                document.getElementById('postTitle').textContent = 'Post Not Found';
+                document.getElementById('postBody').innerHTML = `
+                    <p>Sorry, this blog post could not be found.</p>
+                    <p><a href="blog.html">Return to blog</a></p>
+                `;
+                return;
+            }
+
+            // Update page title and meta description
+            document.title = `${post.title} - Just Chiropractor`;
+            document.querySelector('meta[name="description"]').setAttribute('content', 
+                post.content.substring(0, 150) + '...');
+
+            // Populate post header
+            document.getElementById('postTitle').textContent = post.title;
+            document.getElementById('postMeta').innerHTML = `
+                <span class="post-meta-item">
+                    📅 ${formatDate(post.date)}
+                </span>
+                <span class="post-meta-item">
+                    ✍️ ${post.author}
+                </span>
+            `;
+
+            // Add featured image if present
+            if (post.featuredImage) {
+                const featuredImageHTML = `<img src="${post.featuredImage}" alt="${post.title}" class="post-featured-image" loading="lazy">`;
+                document.getElementById('postTags').insertAdjacentHTML('beforebegin', featuredImageHTML);
+            }
+
+            // Populate tags
+            if (post.tags && post.tags.length > 0) {
+                document.getElementById('postTags').innerHTML = post.tags.map(tag => 
+                    `<span class="tag">${tag}</span>`
+                ).join('');
+            } else {
+                document.getElementById('postTags').style.display = 'none';
+            }
+
+            // Populate post body
+            document.getElementById('postBody').textContent = post.content;
+        }
+    </script>
+</body>
+</html>

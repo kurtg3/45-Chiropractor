@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Find trusted chiropractors across the USA. Comprehensive directory with reviews and contact information.">
+    <title>Just Chiropractor - Find Chiropractors Across the USA</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h2>🏥 Just Chiropractor</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="directory.html">Directory</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="admin.html">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <h1 class="hero-title">Find Your Perfect Chiropractor</h1>
+            <p class="hero-subtitle">Discover trusted chiropractic professionals across all 50 states</p>
+            <div class="hero-search">
+                <select id="stateSelect" class="state-selector">
+                    <option value="">Select Your State</option>
+                </select>
+                <button onclick="searchByState()" class="btn btn-primary">Search</button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalChiropractors">0</span>
+                    <span class="stat-label">Chiropractors</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">50</span>
+                    <span class="stat-label">States</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalPosts">0</span>
+                    <span class="stat-label">Blog Posts</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose Just Chiropractor?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Easy Search</h3>
+                    <p>Find chiropractors in your state with our intuitive search system</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✓</div>
+                    <h3>Verified Professionals</h3>
+                    <p>All listed chiropractors are verified healthcare professionals</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📍</div>
+                    <h3>Nationwide Coverage</h3>
+                    <p>Access to chiropractors across all 50 United States</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Contact Directly</h3>
+                    <p>Get phone numbers, emails, and addresses instantly</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Chiropractors -->
+    <section class="featured">
+        <div class="container">
+            <h2 class="section-title">Featured Chiropractors</h2>
+            <div id="featuredChiros" class="chiro-grid">
+                <!-- Will be populated by JavaScript -->
+            </div>
+            <div class="text-center">
+                <a href="directory.html" class="btn btn-secondary">View Full Directory</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Blog Posts -->
+    <section class="blog-preview">
+        <div class="container">
+            <h2 class="section-title">Latest from Our Blog</h2>
+            <div id="recentPosts" class="blog-grid">
+                <!-- Will be populated by JavaScript -->
+            </div>
+            <div class="text-center">
+                <a href="blog.html" class="btn btn-secondary">Read More Articles</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to Find Your Chiropractor?</h2>
+            <p>Browse our comprehensive directory and connect with professionals in your area</p>
+            <a href="directory.html" class="btn btn-primary btn-lg">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Just Chiropractor</h3>
+                    <p>Your trusted source for finding chiropractors across the USA</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="directory.html">Directory</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="admin.html">Admin</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="sitemap.xml">Sitemap</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Just Chiropractor. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Initialize homepage
+        document.addEventListener('DOMContentLoaded', function() {
+            populateStateSelector('stateSelect');
+            loadFeaturedChiropractors();
+            loadRecentBlogPosts();
+            updateStats();
+        });
+
+        function searchByState() {
+            const state = document.getElementById('stateSelect').value;
+            if (state) {
+                window.location.href = `directory.html?state=${encodeURIComponent(state)}`;
+            } else {
+                alert('Please select a state');
+            }
+        }
+
+        function loadFeaturedChiropractors() {
+            const chiropractors = getChiropractors();
+            const featured = chiropractors.slice(0, 3);
+            const container = document.getElementById('featuredChiros');
+            
+            if (featured.length === 0) {
+                container.innerHTML = '<p class="no-results">No chiropractors found. Add some via the admin panel!</p>';
+                return;
+            }
+
+            container.innerHTML = featured.map(chiro => {
+                const slug = createSlug(chiro.name);
+                return `
+                    <a href="chiropractor-detail.html?id=${chiro.id}&name=${slug}" class="chiro-card" style="text-decoration: none; color: inherit; display: block;">
+                        <div class="chiro-header">
+                            <h3>${chiro.name}</h3>
+                            <span class="state-badge">${chiro.state}</span>
+                        </div>
+                        <p class="chiro-specialty">${chiro.specialty || 'General Chiropractic'}</p>
+                        <div class="chiro-details">
+                            <p>📍 ${chiro.address}</p>
+                            <p>📞 ${chiro.phone}</p>
+                            <p>✉️ ${chiro.email}</p>
+                            ${chiro.website ? `<p>🌐 <span style="color: var(--primary-color);">${chiro.website}</span></p>` : ''}
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        function loadRecentBlogPosts() {
+            const posts = getBlogPosts();
+            const recent = posts.slice(0, 3);
+            const container = document.getElementById('recentPosts');
+            
+            if (recent.length === 0) {
+                container.innerHTML = '<p class="no-results">No blog posts yet. Add some via the admin panel!</p>';
+                return;
+            }
+
+            container.innerHTML = recent.map(post => `
+                <div class="blog-card">
+                    ${post.featuredImage ? `
+                        <img src="${post.featuredImage}" alt="${post.title}" class="blog-card-image" loading="lazy">
+                    ` : `
+                        <div class="blog-card-image-placeholder"></div>
+                    `}
+                    <div class="blog-card-content">
+                        <div class="blog-date">${formatDate(post.date)}</div>
+                        <h3>${post.title}</h3>
+                        <p>${post.content.substring(0, 150)}...</p>
+                        <a href="blog-post.html?id=${post.id}" class="btn btn-link">Read More →</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            const chiropractors = getChiropractors();
+            const posts = getBlogPosts();
+            document.getElementById('totalChiropractors').textContent = chiropractors.length;
+            document.getElementById('totalPosts').textContent = posts.length;
+        }
+    </script>
+</body>
+</html>
